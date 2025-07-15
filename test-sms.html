@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ارسال کد تایید</title>
+  <style>
+    body {
+      font-family: 'Vazir', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 100px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>ورود با شماره موبایل</h2>
+<input type="tel" id="phone" placeholder="شماره موبایل با صفر" dir="ltr" required>
+<button onclick="sendCode()">ارسال کد تایید</button>
+
+<div id="result"></div>
+
+<script>
+function sendCode() {
+  const phone = document.getElementById('phone').value;
+  if (!phone.match(/^09\d{9}$/)) {
+    document.getElementById('result').innerText = "شماره موبایل باید با ۰۹ شروع شود و ۱۱ رقم باشد.";
+    return;
+  }
+
+  const code = Math.floor(10000 + Math.random() * 90000); // کد ۵ رقمی
+
+  const apikey = "1807093505:gKP98hHmnoGXTx0@SenatorApiBot";
+  const template = "1610182413"; // کد قالب تایید شده شما
+  const url = `https://api.fast-creat.ir/sms?apikey=${apikey}&type=sms&code=${code}&phone=${phone}&template=${template}`;
+
+  fetch(url)
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('result').innerHTML = `کد تایید: ${code} <br> پاسخ وب‌سرویس: ${data}`;
+    })
+    .catch(err => {
+      document.getElementById('result').innerText = "ارسال پیامک انجام نشد.";
+    });
+}
+</script>
+
+</body>
+</html>
